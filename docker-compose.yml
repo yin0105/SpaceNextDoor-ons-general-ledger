@@ -1,0 +1,36 @@
+version: "3.6"
+services:
+  ons-mongodb:
+    image : mongo
+    container_name: ons-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: ledger
+    volumes:
+    - ./.data:/data/db
+    ports:
+    - 27017:27017
+    restart: unless-stopped
+    networks:
+      ons_network:
+        ipv4_address: 99.0.0.13
+  ons-ledger:
+    image: node:14.17-alpine
+    container_name: ons-ledger
+    restart: always
+    ports:
+    - 4000:4000
+    env_file:
+      ./.env
+    volumes:
+      - .:/home/node/app
+      - /home/node/app/node_modules
+    working_dir: /home/node/app
+    depends_on:
+      - ons-mongodb
+    command: sh -c 'npm i && npm run start:dev'
+    networks:
+      ons_network:
+        ipv4_address: 99.0.0.14
+networks:
+    ons_network:
+        external: true

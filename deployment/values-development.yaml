@@ -1,0 +1,41 @@
+nodejs:
+  replicaCount: 1
+  nameOverride: dev-ons-general-ledger
+  image:
+    repository: 414928843086.dkr.ecr.ap-southeast-1.amazonaws.com/ons-general-ledger
+    pullPolicy: Always
+  containerPorts:
+    - 3000
+  env:
+    - name: NODE_ENV
+      value: development
+    - name: HOST
+      value: 0.0.0.0
+    - name: PORT
+      value: 3000
+    - name: API_VERSION
+      value: "v1"
+    - name: DB_URI
+      valueFrom:
+        secretKeyRef:
+          key: DB_URI
+          name: ons-general-ledger
+  workingDir: /var/source
+  resources:
+    limits:
+      cpu: 400m
+      memory: 600Mi
+    requests:
+      cpu: 200m
+      memory: 300Mi
+  healthCheck:
+    httpGet:
+      path: /health
+      port: 3000
+  type: ClusterIP
+  default:
+    ports:
+      - name: dev-ons-general-ledger-http
+        externalPort: 80
+        internalPort: 3000
+        protocol: TCP

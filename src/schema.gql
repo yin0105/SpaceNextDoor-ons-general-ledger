@@ -1,0 +1,78 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AccountCodes {
+  code: String!
+  type: AccountType!
+}
+
+enum AccountType {
+  ADMINISTRATIVE_FEES
+  ADMIN_FEES
+  FEES
+  INSURANCE
+  INSURANCE_INCOME
+  LATE_FEES
+  MERCHANDISE
+  PREPAID_INSURANCE_LIABILITIES
+  RENT
+  RENTAL_INCOME
+  SECURITY_DEPOSITS
+}
+
+type CreateJournalEntryResp {
+  message: String!
+  success: Boolean!
+}
+
+enum CustomerType {
+  CUSTOMER
+  GUEST
+}
+
+input JournalEntryInput {
+  account_codes: [AccountCodes!]!
+  amount: Float!
+  book_name: String!
+  memo: String!
+  metadata: Metadata!
+  payment_method: String
+  payment_method_account_code: String
+  transaction_type: TransactionType!
+}
+
+input Metadata {
+  building_id: Int!
+  company_id: Int!
+  customer_id: Int
+  customer_type: CustomerType = CUSTOMER
+  invoice_id: Int
+  merchandise_receipt_id: Int
+  unit_id: Int
+  unit_type_id: Int
+}
+
+type Mutation {
+  createJournalEntry(payload: JournalEntryInput!): CreateJournalEntryResp!
+}
+
+type Query {
+  sayHello: String!
+}
+
+enum TransactionType {
+  ADMIN_FEE_INVOICING
+  ADMIN_FEE_REFUND
+  DEPOSIT_REFUND
+  INSURANCE_INVOICING
+  INSURANCE_REFUND
+  MERCHANDISE_INVOICING
+  MERCHANDISE_PAYMENT
+  PAYMENT_ADMIN_FEE
+  PAYMENT_DEPOSIT
+  PAYMENT_INSURANCE
+  PAYMENT_RENT
+  RENT_INVOICING
+  RENT_REFUND
+}
